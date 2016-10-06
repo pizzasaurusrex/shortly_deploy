@@ -5,10 +5,11 @@ module.exports = function(grunt) {
     concat: {
       options: {
         separator: ';',
+
       },
       dist: {
-        src: ['/**/*.js'],
-        dest: 'dist/built.js'
+        src: ['./public/client/*.js'],
+        dest: 'public/dist/<%= pkg.name %>.js'
       }
     },
 
@@ -29,18 +30,18 @@ module.exports = function(grunt) {
 
     uglify: {
       options: {
-        mangle: false;
+        mangle: false
       },
       my_target: {
         files: {
-          'dest/built.js': ['dest/built.js']
+          'public/dist/<%= pkg.name %>.js': ['public/dist/<%= pkg.name %>.js']
         }
       }
     },
 
     eslint: {
       target: [
-        // Add list of files to lint here
+       'public/**/*.js' // Add list of files to lint here
       ]
     },
 
@@ -51,7 +52,7 @@ module.exports = function(grunt) {
       scripts: {
         files: [
           'public/client/**/*.js',
-          'public/lib/**/*.js',
+          'public/lib/**/*.js'
         ],
         tasks: [
           'concat',
@@ -101,9 +102,9 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('deploy', [
-  ]);
-
   grunt.registerTask('start', ['nodemon']);
+
+  grunt.registerTask('deploy', ['concat', 'uglify', 'eslint', 'test', 'start']);
+
 
 };
