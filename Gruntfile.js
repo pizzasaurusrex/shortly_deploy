@@ -3,6 +3,13 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      options: {
+        separator: ';',
+      },
+      dist: {
+        src: ['/**/*.js'],
+        dest: 'dist/built.js'
+      }
     },
 
     mochaTest: {
@@ -21,6 +28,14 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      options: {
+        mangle: false;
+      },
+      my_target: {
+        files: {
+          'dest/built.js': ['dest/built.js']
+        }
+      }
     },
 
     eslint: {
@@ -76,8 +91,7 @@ module.exports = function(grunt) {
     'mochaTest'
   ]);
 
-  grunt.registerTask('build', [
-  ]);
+  grunt.registerTask('build', ['concat', 'uglify']);
 
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
@@ -88,8 +102,8 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('deploy', [
-    // add your deploy tasks here
   ]);
 
+  grunt.registerTask('start', ['nodemon']);
 
 };
