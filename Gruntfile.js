@@ -69,6 +69,23 @@ module.exports = function(grunt) {
       prodServer: {
       }
     },
+    gitcommit: {
+      my_target: {
+        options: {
+          cwd: "ssh://root@159.203.241.87/var/repo/shortly.git",
+          message: "testing",
+          noVerify: true,
+          noStatus: false
+        }
+      }
+    },
+    gitpush: {
+      my_target: {
+        options: {
+          cwd: "ssh://root@159.203.241.87/var/repo/shortly.git"
+        }
+      }
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -79,6 +96,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
+  grunt.loadNpmTasks('grunt-git');
 
   grunt.registerTask('server-dev', function (target) {
     grunt.task.run([ 'nodemon', 'watch' ]);
@@ -96,7 +114,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
-      // add your production server task here
+      // not sure exactly yet
+      grunt.task.run(['gitcommit', 'gitpush']);
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
@@ -104,7 +123,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('start', ['nodemon']);
 
-  grunt.registerTask('deploy', ['concat', 'uglify', 'eslint', 'test', 'start']);
-
+  grunt.registerTask('deploy', ['concat', 'uglify', 'eslint', 'test', 'start', 'upload']);
 
 };
